@@ -1,0 +1,284 @@
+_G.SecureMode = true
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/CustomFIeld/main/RayField.lua'))()
+
+
+local Window = Rayfield:CreateWindow({
+	Name = "Bubble Gum Clicker by Lol123#0030",
+	LoadingTitle = "Bubble Gum Clicker",
+	LoadingSubtitle = "Lol123#0030",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = Farming, -- Create a custom folder for your hub/game
+		FileName = ""
+	},
+        Discord = {
+        	Enabled = false,
+        	Invite = "", -- The Discord invite code, do not include discord.gg/
+        	RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+        },
+	
+})
+local Tab = Window:CreateTab("Main", 4483362458)
+local Section = Tab:CreateSection("Main")
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Click",
+    CurrentValue = false,
+    Flag = "Auto Click", 
+    Callback = function(Value)
+        _G.autoTap = Value
+    end
+})
+
+spawn(function()
+    while wait() do
+      if _G.autoTap then
+        local args = {
+            [1] = {
+                [1] = {
+                    [1] = false
+                },
+                [2] = {
+                    [1] = 2
+                }
+            }
+        }
+        
+        workspace.Stuff.Remotes:FindFirstChild("blow bubble"):FireServer(unpack(args))
+        wait()
+      end
+  end
+end)
+
+
+
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Sell",
+    CurrentValue = false,
+    Flag = "Auto Sell", 
+    Callback = function(Value)
+        _G.autoSell = Value
+    end
+})
+
+spawn(function()
+    while wait() do
+      if _G.autoSell then
+        local args = {
+            [1] = {
+                [1] = {
+                    [1] = true
+                },
+                [2] = {
+                    [1] = false
+                }
+            }
+        }
+        
+        workspace.Stuff.Remotes:FindFirstChild("sell bubbles"):FireServer(unpack(args))
+        wait()
+      end
+  end
+end)
+
+local Section = Tab:CreateSection("Auto Collect")
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Collect",
+    Info = "Collects all those lootbags/gems/coins that spawn in",
+    CurrentValue = false,
+    Flag = "Auto Collect", 
+    Callback = function(Value)
+        _G.autoCollect = Value
+    end
+})
+
+spawn(function()
+    local playerHead = game.Players.LocalPlayer.Character.Head
+    while wait() do
+      if _G.autoCollect then
+        for i, v in pairs(game:GetService("Workspace").Stuff.Pickups:GetChildren()) do
+            if v.Name == "TouchInterest" and v.Parent then
+                firetouchinterest(playerHead, v.Parent, 0)
+                wait(0.1)
+                firetouchinterest(playerHead, v.Parent, 1)
+            end
+        end
+      else
+        for i, v in pairs(game:GetService("Workspace").CollectablesFolderChristmas:GetChildren()) do
+            if v.Name == "TouchInterest" and v.Parent then
+                firetouchinterest(playerHead, v.Parent, 0)
+            end
+        end
+      end
+    end
+end)
+
+
+
+
+
+local Tab = Window:CreateTab("Eggs", 4483362458)
+local Section = Tab:CreateSection("Egg")
+
+local eggtable = {}
+
+for i,v in ipairs(game:GetService("Workspace").MAP.Eggs:GetChildren()) do
+    if not v.Name:match("Robux") then
+            table.insert(eggtable,v.Name)
+    end
+end
+
+local eggtoopen = "iagree"
+Tab:CreateDropdown({
+    Name = "Egg to Open",
+    Options = eggtable,
+    CurrentOption = "",
+    Flag = "Egg to open",
+    Callback = function(Option)
+        eggtoopen = Option
+    end,
+})
+
+
+local Toggle = Tab:CreateToggle({
+	Name = "Auto Open Egg x1",
+	CurrentValue = false,
+	Flag = "Auto Egg", 
+	Callback = function(Value)
+        _G.buyegg2 = Value
+        if Value then
+            buyegg2(eggtoopen)
+        end
+	end
+})
+
+function buyegg2(v)
+    spawn(function()
+        while wait() and _G.buyegg2 do 
+            local args = {
+                [1] = {
+                    [1] = {
+                        [1] = v
+                    },
+                    [2] = {
+                        [1] = false
+                    }
+                }
+            }
+            
+            workspace.Stuff.Remotes:FindFirstChild("buy egg"):InvokeServer(unpack(args))
+            wait()    
+        end
+    end)
+end
+
+
+local Toggle = Tab:CreateToggle({
+	Name = "Auto Open Egg x3(Need Gamepass)",
+	CurrentValue = false,
+	Flag = "Auto Egg2", 
+	Callback = function(Value)
+        _G.buyegg3 = Value
+        if Value then
+            buyegg3(eggtoopen)
+        end
+	end
+})
+
+function buyegg3(v)
+    spawn(function()
+        while wait() and _G.buyegg3 do 
+            local args = {
+                [1] = {
+                    [1] = {
+                        [1] = v
+                    },
+                    [2] = {
+                        [1] = true
+                    }
+                }
+            }
+            
+            workspace.Stuff.Remotes:FindFirstChild("buy egg"):InvokeServer(unpack(args))
+            wait()    
+        end
+    end)
+end
+
+local Tab = Window:CreateTab("Local Player", 4483362458)
+    local Section = Tab:CreateSection("Local Player")
+    local Toggle = Tab:CreateToggle({
+        Name = "Toggle WalkSpeed",
+        CurrentValue = false,
+        Flag = "Toggle1", 
+        Callback = function(Value)
+            _G.ChangeWalkSpeed = Value
+        end,
+    })
+    
+    local Slider = Tab:CreateSlider({
+        Name = "Change WalkSpeed",
+        Range = {50, 500},
+        Increment = 10,
+        Suffix = "Speed",
+        CurrentValue = 10,
+        Flag = "Slider1", 
+        Callback = function(Value)
+            _G.walkSpeed = Value
+        end,
+    })
+    
+    task.spawn(function()
+        while wait() do 
+    if _G.walkSpeed ~= nil and _G.ChangeWalkSpeed then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = _G.walkSpeed
+    elseif not _G.ChangeWalkSpeed then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+      end
+    end
+end)
+    
+    local Toggle = Tab:CreateToggle({
+        Name = "Toggle JumpPower",
+        CurrentValue = false,
+        Flag = "Toggle2", 
+        Callback = function(Value)
+            _G.ChangeJumpPower = Value
+        end,
+    })
+    
+    local Slider = Tab:CreateSlider({
+        Name = "Change JumpPower",
+        Range = {50, 500},
+        Increment = 10,
+        Suffix = "Jump Power",
+        CurrentValue = 10,
+        Flag = "Slider2", 
+        Callback = function(Value)
+            _G.jumpPower = Value
+        end,
+    })
+    
+    task.spawn(function()
+        while wait() do 
+            if _G.jumpPower ~= nil and _G.ChangeJumpPower then
+                game.Players.LocalPlayer.Character.Humanoid.JumpPower = _G.jumpPower
+            end
+        end
+    end)
+
+local Tab = Window:CreateTab("Misc", 4483362458)
+local Section = Tab:CreateSection("Misc")
+local Toggle = Tab:CreateToggle({
+    Name = "Anti-Afk",
+    CurrentValue = false,
+    Flag = "Antiafk", 
+    Callback = function(Value)
+        _G.antiafk = Value
+        if _G.antiafk then
+            while _G.antiafk do
+                game:GetService("Players").LocalPlayer.Character:MoveTo(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0,0,0))
+                wait(300)
+            end
+        end
+    end
+})
